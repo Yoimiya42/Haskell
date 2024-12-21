@@ -10,7 +10,7 @@ ghc cwk2_24-25.hs
 ./cwk2_24-25
 ```
 3. Expected result (On my win11 laptop):  
-! [Expected result] (result_preview.png)
+! [Expected result](result_preview.png)
 
 
 ## Load File into GHCi (Interactive Mode):
