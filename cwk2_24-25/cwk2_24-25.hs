@@ -74,9 +74,7 @@ combineHorse (x:xs) h
 horseSeq :: (Int -> [Int]) -> Int -> Horse -> IO()
 horseSeq f n h = mapM_ pretty $ combineHorse (f n) h
 
-main :: IO()
-main = do
-    horseSeq tribonacci 5 myHorse
+
 
     
 -- 5. Monads
@@ -92,3 +90,8 @@ shead (x:_)  = Just x     -- Return Just the first element for a non-empty list
 stail :: [a] -> Maybe [a]
 stail []     = Nothing    -- Return Nothing for an empty list
 stail (_:xs) = Just xs    -- Return Just the rest of the list for a non-empty list
+
+
+main :: IO()
+main = do
+    horseSeq tribonacci 5 myHorse
