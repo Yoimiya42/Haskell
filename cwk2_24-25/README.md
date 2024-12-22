@@ -5,12 +5,12 @@
 ```
 ghc cwk2_24-25.hs
 ```
-2. Execute te generated file:
+2. Execute the generated file:
 ```
 ./cwk2_24-25
 ```
 3. Expected result (On my win11 laptop):  
-! [Expected result](result_preview.png)
+![Expected result](result_preview.png)
 
 
 ## Load File into GHCi (Interactive Mode):
@@ -18,11 +18,11 @@ ghc cwk2_24-25.hs
  ```
  ghci
  ```
-1. Load the file into GHCi:
+2. Load the file into GHCi:
  ```
  :l cwk2_24-25.hs
  ```
-1. Run the `main` function or any other defined function:
+3. Run the `main` function or any other defined function:
  ```
  ghci>main
  ```
@@ -35,4 +35,5 @@ ghc cwk2_24-25.hs
  ```
  ghci>pretty myHorse
  ```
+ ...
     
