@@ -37,3 +37,108 @@
 
 
 **How local and parameter variables are allocated and deallocated in memory when a function is called**: When a function is called, its local variables and parameters are allocated on the stack in a stack frame. When the function ends, the stack frame is removed, deallocating the memory automatically.
+
+
+In C, when an operation involves different arithmetic types, the "lower" type is typically promoted to the "higher" type.
+
+```c
+ char *ptr = (num % 10) + '0'; // int -> char
+ int num = '5' - '0'; // char -> int
+```
+
+### String
+
+`strlen(char *str)`: Returns the length of a string excluding the '\0'.
+`strcpy(char *dest, char *src)`: Copies the string from `src` to `dest`, including the '\0' character. The destination must have enough space to hold the source string.
+```c
+char* coryStr(char* src){
+    char *dest = malloc((strlen(src) + 1) * sizeof(char)); 
+    strcpy(dest, src);
+
+    return dest;
+}
+
+char *str1 = "hello";
+char *str2 = "world";
+char *result = malloc(strlen(str1) + strlen(str2) + 1); // +1 for null terminator
+strcpy(result, str1); // Copy str1 to result
+strcat(result, str2); // Concatenate str2 to result
+```
+
+---
+`strcmp(char *str1, char *str2)`: Compares two strings lexicographically.   
+Returns 0 if equal, negative if str1 < str2, and positive if str1 > str2.
+```c
+char *str1 = "hello";
+char *str2 = "world";
+int result = strcmp(str1, str2); // result will be negative since "hello" < "world"
+```
+
+### struct
+`malloc(n * sizeof(type))`
+`calloc(n, sizeof(type)`
+`realloc(oldptr, n * sizeof(type))`
+Example of 2022 POP: 
+```c
+typedef struct file{
+    char *name;
+    int size;
+}File;
+
+typedef struct directory{
+    char *name;
+    File **files; // array of pointers to File
+    int fileCount;
+}Directory;
+
+
+
+File *createFile(char *name, int size){
+    File *file = calloc(1, sizeof(File));
+
+    // NOTE HERE //
+    file->name = calloc(strlen(name) + 1, sizeof(char));
+    strcpy(file->name, name);
+    // NOTE HERE //
+
+    file->size = size;
+
+    return file;
+}
+
+Directory *createDirectory(char *name){
+    Directory *dir = calloc(1, sizeof(Directory));
+
+    dir->name = calloc(strlen(name) + 1, sizeof(char));
+    strcpy(dir->name, name);
+
+    dir->files = NULL; // enpty array of pointers to File
+    dir->fileCount = 0;
+
+    return dir;
+}
+
+void addFile(Directory *dir, File *file){
+
+    dir->fileCount++;
+
+    dir->files = realloc(dir->files, (dir->fileCount) * sizeof(File*));
+    dir->files[dir->fileCount - 1] = file; 
+}
+
+void addFile_(Directory *dir, File *file){
+    dir->fileCount++;
+
+    File **newFiles = calloc(dir->fileCount, sizeof(File*));
+
+    for(int i = 0; i < dir->fileCount - 1; i++)
+        *(newFiles + i) = *(dir->files + i); // copy old files to new array
+    
+    *(newFiles + (dir->fileCount - 1)) = file; // add new file
+    free(dir->files);
+    dir->files = newFiles; // update the pointer to the new array
+}
+```
+
+
+
