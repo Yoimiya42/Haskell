@@ -38,6 +38,11 @@
 
 **How local and parameter variables are allocated and deallocated in memory when a function is called**: When a function is called, its local variables and parameters are allocated on the stack in a stack frame. When the function ends, the stack frame is removed, deallocating the memory automatically.
 
+**linking**
+**abstraction**
+**Escape character** Special character used to force an alternate interpretation of the following
+character. It is typically "\" although others exist
+**Overflow**: Occurs when a variable is assigned a value that it cannot hold
 
 In C, when an operation involves different arithmetic types, the "lower" type is typically promoted to the "higher" type.
 
