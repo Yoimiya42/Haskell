@@ -66,12 +66,13 @@ result = Just 10 >>= (\x -> safeDiv x 2)   -- Result: Just 5
 
 **Polymorphic type**: A type that can represent multiple different types
 
-**Guarded**:
+**Overloaded types** allow operations to work on multiple types that share common behaviors. = "polymorphic" types + typeclass constraint.
 
+**Guarded**: A way to define functions with multiple conditions, using `|` to separate them.
+**class** is a collection of types that support certain operations, called the methods of the class.
 **Prelude**:  Haskell's default standard library that is automatically imported into every programs. Includes **basic types(`Int`, `Maybe`)**, common functions(`map`, `filter`, `foldl`), and standard typeclass (`Eq`, `Ord`, `Show`).
 
-**Do**: Syntax sugar over the Monad typeclass, that allows monadic code to be written in an
-imperative style.
+**Do**: Syntax sugar over the Monad typeclass, that allows monadic code to be written in an imperative style.(A sequence of actions can be combined as a single composite action using `do`)
 
 # Higher-Order Functions
 ```haskell
@@ -130,10 +131,6 @@ mySum xs = foldr (+) 0 (map (\x -> x * x) xs)
 -- mySum = foldr (+) . map (\ x -> x * x)
 ```
 
-# Type Classes
-
-
-
 # I/O 
 ```haskell
 getLine :: IO String 
@@ -166,28 +163,52 @@ testInts = do
       else putStrLn "Not all numbers you entered are even."
 ```
 
-
-
-# Sort
-**InsertionSort**
+## Curried Functions
 ```haskell
-insert  :: Ord a => a -> [a] -> [a]
-insert x [] = [x]
-insert y (x:xs) 
-      | y <= x    = x : y : xs
-      | otherwise = x: insert y xs
+add :: Int -> Int -> Int
+add x y = x + y
 
-insert' :: Ord a => a -> [a] -> [a]
-insert' y xs = [a | a <- xs, a <= y]
-                  ++ [y] ++
-               [b | b <- xs, b > y]
+add' :: Int -> (Int -> Int)
+add' x = \y -> x + y
 
-insertSort ：：[Int] -> [Int]
-insertSort = foldr insert [] xs
+curry :: ((a, b) -> c) -> a -> b -> c
+curry f x y = f (x, y)
+
+uncurry :: (a -> b -> c) -> (a, b) -> c
+uncurry f (x, y) = f x y
 ```
 
-**MergeSort**
+# Monad
 ```haskell
-```
+safeRecip :: Double -> Maybe Double
+safeRecip 0 = Nothing
+safeRecip x = Just (1 / x)
 
+safeSqrt :: Double -> Maybe Double
+safeSqrt x | x < 0     = Nothing
+           | otherwise = Just (sqrt x)
+
+example = Just 4 >>= safeSqrt >>= safeRecip
+-- 相当于：safeRecip(sqrt(4)) = Just 0.5
+
+example2 = Just (-4) >>= safeSqrt >>= safeRecip
+-- safeSqrt (-4) = Nothing，后面就不会执行
+```
+---
+```haskell
+safeDiv :: Int -> Int -> Maybe Int
+safeDiv _ 0 = Nothing
+safeDiv x y = Just (x `div` y)
+
+safeDivide :: IO ()
+safeDivide = do
+  putStrLn "Enter numerator:"
+  a <- readLn
+  putStrLn "Enter denominator:"
+  b <- readLn
+  case safeDiv a b of
+    Nothing  -> putStrLn "Error: Cannot divide by zero."
+    Just val -> putStrLn $ "Result: " ++ show val
+
+```
 

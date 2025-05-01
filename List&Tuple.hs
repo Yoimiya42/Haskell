@@ -59,6 +59,9 @@
 -- ghci> 4 'elem' [1,2,3,4,5] -> True
 -- ghci> 10 'elem' [1,2,3,4,5] -> False
 -- 'elem' (element) checks if the elements is present in the list 
+
+-- ghci> splitAt 3 [1,2,3,4,5] -> ([1,2,3], [4,5])
+-- ghci> splitAt 10 [1,2,3,4,5] -> ([1,2,3,4,5], [])
 ----------------------------------------------------------------------
 --      List Comparisons
 -- compared in lexicographical order
@@ -104,9 +107,17 @@
 -- zip function:  takes two lists and zips them together into one list by joining the matching elements into pairs.
 
 -- ghci> zip [1..10][10,20,30,40,50] -> [(1,10), (2,20), (3,30), (4,40), (5,50)] 
+-- ghci> unzip [(1,10), (2,20), (3,30), (4,40), (5,50)] -> ([1,2,3,4,5], [10,20,30,40,50])
 
 -- (The longest list is truncated to match the shorter one)
 ----------------------------------------------------------------------
 triangle :: [(Int, Int, Int)] 
 triangle = [(a, b, c) | c <- [1..10], b <- [1..10], a <- [1..10], a^2 + b^2 == c^2, a + b + c == 24]
 
+----------------------------------------------------------------------
+-- Tuple Functions
+-- ghci> fst (1,2,3) -> 1
+-- ghci> snd (1,2,3) -> 2
+-- ghci> thd (1,2,3) -> 3
+
+-- 

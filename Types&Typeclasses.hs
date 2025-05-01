@@ -30,3 +30,19 @@
 
 --Typeclass is more like interface, we don't make data from typeclasses. Instead, we first make our [data type]
 -- and then think about what it can act like.
+
+--     Eq     Show     Read
+--      │       │        │
+--      └───┬───┘        └───▶ printable
+--          │
+--         Ord
+--          │
+--         Num
+--      ┌───┴───────┐
+--  Integral     Fractional
+
+--      Functor
+--         │
+--    Applicative
+--         │
+--       Monad

@@ -1,6 +1,5 @@
 - **const**: It makes a variable' value unchangeable after it's initialization, preventing accidental changes.
-- **static**: It makes a variable or function keep its value between function calls, or restricts its visibility to the file it's defined in.
-- **extern**: It tells the compiler that a variable or function is defined in another file, so it can be used in the current file.
+
 - **typedef**: It creates an alias for a existing data type to make code more readable, portable.
 ---
 
@@ -9,8 +8,19 @@
 
 - **scope**: It defines where a variable can be accessed in the code, like inside a function (local variable), file scope(within a file) or global scope (entire program and other files).(NOTE: about accessibility)
 - **lifetime**: The duration a variable exists in memory, from its creation to destruction. Local variables' lifetime lasts while their block active; file scope variables last the entire program runtime.(NOTE: about existence)
-  
+
+- **File Scope**
+The scope of an identifier declared outside any function, valid from its declaration to the end of the source file.(never deallocated while the program is running)
+- **Local Scope(Parameter Variable)**:
+The scope of an identifier declared within a block, valid from its declaration to the end of the block (within a function body)
+- **Global Scope**:
+The scope of identifiers accessible across multiple source files, often using `extern`.
+- **Nested Scope**:
+A scope within another scope, where outer scope identifiers are accessible in the inner scope.
+- **static**: It makes a variable or function keep its value between function calls, or restricts its visibility to the file it's defined in.
+- **extern**: It tells the compiler that a variable or function is defined in another file, so it can be used in the current file.
 ---
+- **process**: is created by the operation system and manages the resources needed to run a program.
 - **address space**: It's the range of memory a program can use, divided into areas like stack, heap, data segment and code segment.
   - **stack**: The stack stores local variables and function parameters. These ara allocated when a function is called and deallocated when the function returns.
   - **heap** : The heap stores dynamically allocated memory, which is allocated using `malloc() or calloc()` and deallocated using `free()` manually.
@@ -38,11 +48,21 @@
 
 **How local and parameter variables are allocated and deallocated in memory when a function is called**: When a function is called, its local variables and parameters are allocated on the stack in a stack frame. When the function ends, the stack frame is removed, deallocating the memory automatically.
 
-**linking**
-**abstraction**
-**Escape character** Special character used to force an alternate interpretation of the following
+**linking**: Combines object files and libraries into a single executable, resolving function and variable addresses.
+**abstraction**: Hides complex implementation details, exposing only necessary features to simplify usage.
+**imperative programming**: a sequence of statements that change a program's state, focusing on how to perform tasks.
+**Object File**:A compiled file (.o on Unix, .obj on Windows) containing relocatable binary code.
+**Virtual Address Space**:A process’s private memory range, mapped to physical memory by the operating system.
+**Escape character**:Special character used to force an alternate interpretation of the following
 character. It is typically "\" although others exist
 **Overflow**: Occurs when a variable is assigned a value that it cannot hold
+
+You write your C code in a text editor and save it as a .c file.
+**Preprocessing**: The preprocessor handles directives like #include and #define.
+**Compilation**: The compiler translates the preprocessed code into **assembly language**.
+**Assembly**: The assembler converts the assembly code into machine code (object files).
+**Linking**: The linker combines your object code with library code to create the final executable file.
+Execution: The operating system loads the executable into memory and runs it.
 
 In C, when an operation involves different arithmetic types, the "lower" type is typically promoted to the "higher" type.
 
@@ -98,7 +118,7 @@ typedef struct directory{
 
 
 
-File *createFile(char *name, int size){
+File *createFile(const char *name, const int size){
     File *file = calloc(1, sizeof(File));
 
     // NOTE HERE //
@@ -111,7 +131,7 @@ File *createFile(char *name, int size){
     return file;
 }
 
-Directory *createDirectory(char *name){
+Directory *createDirectory(const char *name){
     Directory *dir = calloc(1, sizeof(Directory));
 
     dir->name = calloc(strlen(name) + 1, sizeof(char));
@@ -142,6 +162,35 @@ void addFile_(Directory *dir, File *file){
     *(newFiles + (dir->fileCount - 1)) = file; // add new file
     free(dir->files);
     dir->files = newFiles; // update the pointer to the new array
+}
+```
+---
+```c
+typedef struct Node{
+    int data;
+    char *str;
+    double *doubleArr;
+    int intArr[10];
+}Node;
+
+
+Node* createNode(const int data, const char *str, const double * doubleArr, const int doubleSize, const int *intArr){
+    const int size, const int *intArr){
+    Node *node = malloc(sizeof(Node));
+
+    node->data = data;
+
+    node->str = malloc(strlen(str) + 1);
+    strcpy(node->str, str);
+
+    node->doubleArr = malloc(size * sizeof(double));
+    for(int i = 0; i < doubleSize; i++)
+        node->doubleArr[i] = doubleArr[i];
+
+    for(int i = 0; i < 10; i++)
+        node->intArr[i] = intArr[i];
+
+    return node;
 }
 ```
 
