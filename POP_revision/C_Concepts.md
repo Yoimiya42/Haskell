@@ -64,17 +64,20 @@
   - **linking**: Combines object code and libraries into an executable.
   - **execution**: The operating system loads and runs the program.
 
-- **arithmetic promotion**: In mixed-type arithmetic, the lower type is usually promoted to the higher type.
+- **integer promotion**: In an arithmetic expression, small integer types such as `char` and `short` are automatically promoted to `int`. Character constants like `'5'` already have type `int` in C, so `'5' - '0'` is just `int - int`.
 
 ```c
-char ch = (num % 10) + '0'; // int -> char
-int num = '5' - '0';        // char -> int
+char a = 1, b = 2;
+char c = a + b; // a and b are promoted to int; (a + b) is int.
+                // Assigning back to char is an implicit narrowing conversion.
+
+char ch = (num % 10) + '0'; // int result narrowed to char on assignment
 ```
 
 ### Strings
 
-- `strlen(char *str)`: Returns the length of a string, excluding `'\0'`.
-- `strcpy(char *dest, char *src)`: Copies `src` to `dest`, including `'\0'`. `dest` must have enough space.
+- `size_t strlen(const char *str)`: Returns the length of a string, excluding `'\0'`. Note the return type is `size_t`, not `int`.
+- `char *strcpy(char *dest, const char *src)`: Copies `src` to `dest`, including `'\0'`. `dest` must have enough space.
 
 ```c
 char *copyStr(char *src) {
@@ -142,7 +145,11 @@ Directory *createDirectory(const char *name) {
 
 void addFile(Directory *dir, File *file) {
     dir->fileCount++;
-    dir->files = realloc(dir->files, dir->fileCount * sizeof(File *));
+    // Use a temp pointer: if realloc fails it returns NULL,
+    // and assigning NULL directly to dir->files would leak the old buffer.
+    File **tmp = realloc(dir->files, dir->fileCount * sizeof(File *));
+    if (tmp == NULL) { /* handle allocation failure */ return; }
+    dir->files = tmp;
     dir->files[dir->fileCount - 1] = file;
 }
 

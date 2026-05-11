@@ -31,13 +31,14 @@ foldr (\x acc -> x + acc) 0 xs
 
 - **Higher-order function**: Takes a function as an argument or returns a function. Examples: `map`, `filter`, `foldr`, `foldl`, `zipWith`.
 
-- **Tail recursion**: The recursive call is the last operation. This can reuse the stack frame and save memory.
+- **Tail recursion**: The recursive call is the last operation. In strict languages this lets the compiler reuse the stack frame (TCO). In Haskell, due to lazy evaluation, a tail-recursive call alone does not save memory: the accumulator builds up a chain of unevaluated thunks. To actually run in constant space, force the accumulator with `seq`, `$!`, or a bang pattern.
 
 ```haskell
-factorial :: Int -> Int -> Int
-factorial n acc
-  | n == 0    = acc
-  | otherwise = factorial (n - 1) (n * acc)
+factorial :: Int -> Int
+factorial n = go n 1
+  where
+    go 0 acc = acc
+    go n acc = go (n - 1) $! (n * acc) -- $! forces (n * acc) before the call
 ```
 
 - **Lazy evaluation**: Evaluates an expression only when its result is needed.
